@@ -104,17 +104,19 @@ export default function Homepage() {
     <div className="min-h-screen bg-blue-50 font-sans text-blue-900">
       
       {/* Navigation */}
-      <nav className="bg-blue-900 text-white p-4 sticky top-0 z-50 shadow-md">
+      <nav className="bg-white text-blue-900 p-4 sticky top-0 z-50 shadow-md">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-yellow-400 flex items-center gap-2">
-            <Globe className="text-orange-500" />
-            Danny's Connect
-          </div>
+            <div className="flex-shrink-0 flex items-center space-x-3">
+              <img 
+                src="/logo.png" 
+                alt="Danny's Connect Logo" 
+                className="w-60 h-15 object-contain"
+              />
+            </div>
           <div className="hidden md:flex gap-6 font-semibold">
-            <a href="#" className="hover:text-yellow-400 transition-colors">Home</a>
-            <a href="#" className="hover:text-yellow-400 transition-colors">About Us</a>
-            <a href="#" className="hover:text-yellow-400 transition-colors">Services</a>
-            <a href="#" className="hover:text-yellow-400 transition-colors">Gallery</a>
+            <a href="/" className="hover:text-yellow-400 transition-colors">Home</a>
+            <a href="/about-us" className="hover:text-yellow-400 transition-colors">About Us</a>
+            <a href="/gallery" className="hover:text-yellow-400 transition-colors">Gallery</a>
           </div>
           <div className="flex gap-4">
             <button 
@@ -269,16 +271,16 @@ export default function Homepage() {
           </div>
           <div className="grid grid-cols-2 gap-4 text-sm font-medium">
             <div className="flex flex-col gap-2">
-              <a href="#" className="hover:text-yellow-400">About Us</a>
-              <a href="#" className="hover:text-yellow-400">For Students</a>
-              <a href="#" className="hover:text-yellow-400">For Universities</a>
-              <a href="#" className="hover:text-yellow-400">Blog</a>
+              <a href="/about-us" className="hover:text-yellow-400">About Us</a>
+              <a href="/for-students" className="hover:text-yellow-400">For Students</a>
+              <a href="/for-universities" className="hover:text-yellow-400">For Universities</a>
+              <a href="/blog" className="hover:text-yellow-400">Blog</a>
             </div>
             <div className="flex flex-col gap-2">
-              <a href="#" className="hover:text-orange-400">Privacy Policy</a>
-              <a href="#" className="hover:text-orange-400">Terms</a>
-              <a href="#" className="hover:text-orange-400">Conditions</a>
-              <a href="#" className="hover:text-orange-400">Help</a>
+              <a href="/privacy-policy" className="hover:text-orange-400">Privacy Policy</a>
+              <a href="/terms" className="hover:text-orange-400">Terms</a>
+              <a href="/conditions" className="hover:text-orange-400">Conditions</a>
+              <a href="/help" className="hover:text-orange-400">Help</a>
             </div>
           </div>
         </div>

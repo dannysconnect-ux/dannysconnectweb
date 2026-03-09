@@ -10,6 +10,8 @@ import UserDetails from './UserDetails.tsx'
 import Dashboard from './StudentDashboard.tsx'
 import Signup from './Signup.tsx'
 import AdminDashboard from './AdminDashboard.tsx'
+import AboutUs from './AboutUs.tsx'
+import Gallery from './Gallery.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -22,6 +24,8 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/about-us" element={<AboutUs />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/setup-profile" element={<UserDetails />} />
         
         {/* Student Dashboard */}
