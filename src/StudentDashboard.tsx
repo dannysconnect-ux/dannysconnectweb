@@ -13,7 +13,7 @@ import Application from './components/Application';
 
 
 const API_BASE_URL = import.meta.env?.VITE_API_BASE || 
-  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://www.dannysconnect.com');
+  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://dannysconnect-938159032176.us-central1.run.app');
 
 
 export default function Dashboard() {
