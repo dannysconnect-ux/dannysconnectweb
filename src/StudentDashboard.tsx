@@ -10,6 +10,12 @@ import { auth, db } from './firebase';
 import Chatbot from './components/Chatbot'; 
 import Application from './components/Application'; 
 
+
+
+const API_BASE_URL = import.meta.env?.VITE_API_BASE || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://www.dannysconnect.com');
+
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -98,7 +104,7 @@ export default function Dashboard() {
     
     setLoadingMatches(true);
     try {
-      const response = await fetch('http://localhost:8000/api/matches', {
+      const response = await fetch(`${API_BASE_URL}/api/matches`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ student_profile: userProfile }),

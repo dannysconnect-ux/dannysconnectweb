@@ -1,6 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Loader2, User } from 'lucide-react';
 
+
+
+const API_BASE_URL = import.meta.env?.VITE_API_BASE || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://www.dannysconnect.com');
+
+
+
 // Define the shape of our messages based on the FastAPI backend
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -128,7 +135,7 @@ export default function Chatbot({ isOpen, onClose, studentProfile }: ChatbotProp
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
