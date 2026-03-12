@@ -1,3 +1,4 @@
+import os
 import json
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,6 +28,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# This ensures it finds your key whether you named it GEMINI_API_KEY or GOOGLE_API_KEY in Cloud Run
+api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+client = genai.Client(api_key=api_key)
+# -------------------------------------
+
 
 # Pydantic Models for Data Validation
 class ChatMessage(BaseModel):
