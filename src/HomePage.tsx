@@ -8,126 +8,74 @@ import {
   Plane, 
   Briefcase, 
   Globe,
-  Loader2, 
-  CheckCircle, 
-  MapPin 
+  ChevronLeft,
+  ChevronRight,
+  PlayCircle
 } from 'lucide-react';
 
-// --- AI Chat & Match Animation Component ---
-const AiActionAnimation = () => {
-  const [step, setStep] = useState(0);
+// --- Mock Data for Carousel and Testimonials ---
+const CAROUSEL_IMAGES = [
+  "/grads.jpg", // Graduation
+  "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2000", // University Campus
+  "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000", // Travel/Flight
+];
 
-  // Cycle through the animation steps
-  useEffect(() => {
-    const sequence = async () => {
-      if (step === 0) setTimeout(() => setStep(1), 1500); // Show User Chat
-      if (step === 1) setTimeout(() => setStep(2), 2000); // Show AI Analyzing
-      if (step === 2) setTimeout(() => setStep(3), 2500); // Show Matching Results
-      if (step === 3) setTimeout(() => setStep(0), 5000); // Reset after showing results
-    };
-    sequence();
-  }, [step]);
+const TESTIMONIALS = [
+  { id: 1, duration: "0:00 / 0:32", thumbnail: "https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&q=80&w=600" },
+  { id: 2, duration: "0:00 / 1:20", thumbnail: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=600" },
+  { id: 3, duration: "0:00 / 1:40", thumbnail: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=600" },
+  { id: 4, duration: "0:00 / 2:04", thumbnail: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&q=80&w=600" },
+  { id: 5, duration: "0:00 / 1:36", thumbnail: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=600" },
+];
 
-  return (
-    <div className="w-full h-100 bg-blue-950 rounded-2xl border-4 border-orange-100 p-4 relative overflow-hidden flex flex-col shadow-2xl shadow-blue-900/50">
-      
-      {/* Header */}
-      <div className="flex items-center gap-2 border-b border-blue-800 pb-2 mb-4">
-        <Bot className="text-yellow-400" size={20} />
-        <span className="text-blue-200 text-sm font-semibold tracking-wider uppercase">Danny's AI Assistant</span>
-      </div>
-
-      <div className="flex-1 flex flex-col gap-3 justify-end pb-2">
-        
-        {/* Step 1: User Chat Bubble */}
-        <div className={`flex justify-end transition-all duration-500 transform ${step >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-          <div className="bg-blue-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm shadow-md">
-            I'm looking for a paid IT internship and study program in Europe.
-          </div>
-        </div>
-
-        {/* Step 2: AI Analyzing / Matching */}
-        <div className={`flex justify-start transition-all duration-500 transform ${step >= 2 && step < 3 ? 'translate-y-0 opacity-100' : 'hidden'}`}>
-          <div className="bg-blue-800 border border-yellow-400 text-white p-3 rounded-2xl rounded-tl-none flex items-center gap-3 text-sm shadow-[0_0_15px_rgba(250,204,21,0.2)]">
-            <Loader2 className="animate-spin text-orange-500" size={18} />
-            <span className="text-yellow-200 animate-pulse">Analyzing profile & matching universities...</span>
-          </div>
-        </div>
-
-        {/* Step 3: Results */}
-        <div className={`flex flex-col gap-2 transition-all duration-700 transform ${step >= 3 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0 hidden'}`}>
-          <div className="flex justify-start">
-             <div className="bg-blue-800 border border-blue-700 text-white p-3 rounded-2xl rounded-tl-none text-sm mb-1">
-              Here are your top matches:
-            </div>
-          </div>
-          
-          {/* Result Card 1 */}
-          <div className="bg-white rounded-lg p-3 flex items-center gap-3 shadow-lg border-l-4 border-orange-500 transform hover:scale-105 transition-transform cursor-pointer">
-            <div className="bg-orange-100 p-2 rounded-full">
-              <GraduationCap className="text-orange-600" size={20} />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-blue-900 font-bold text-sm">Tech University of Berlin</h4>
-              <div className="flex items-center gap-1 text-blue-600 text-xs">
-                <MapPin size={12} /> Germany • 85% Match
-              </div>
-            </div>
-            <CheckCircle className="text-green-500" size={18} />
-          </div>
-
-          {/* Result Card 2 */}
-          <div className="bg-white rounded-lg p-3 flex items-center gap-3 shadow-lg border-l-4 border-yellow-400 transform hover:scale-105 transition-transform cursor-pointer">
-            <div className="bg-yellow-100 p-2 rounded-full">
-              <GraduationCap className="text-yellow-600" size={20} />
-            </div>
-            <div className="flex-1">
-              <h4 className="text-blue-900 font-bold text-sm">Innovate Institute</h4>
-              <div className="flex items-center gap-1 text-blue-600 text-xs">
-                <MapPin size={12} /> France • 78% Match
-              </div>
-            </div>
-            <CheckCircle className="text-green-500" size={18} />
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-};
-
-// --- Main Homepage Component ---
 export default function Homepage() {
   const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+    }, 5000); // Changes every 5 seconds
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % CAROUSEL_IMAGES.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + CAROUSEL_IMAGES.length) % CAROUSEL_IMAGES.length);
+  };
 
   return (
-    <div className="min-h-screen bg-blue-50 font-sans text-blue-900">
+    <div className="min-h-screen bg-blue-50 font-sans text-blue-900 overflow-x-hidden">
       
       {/* Navigation */}
       <nav className="bg-white text-blue-900 p-4 sticky top-0 z-50 shadow-md">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <div className="flex-shrink-0 flex items-center space-x-3">
+        <div className="max-w-6xl mx-auto flex justify-between items-center gap-2">
+            <div className="flex-shrink-0 flex items-center">
               <img 
                 src="/logo.png" 
                 alt="Danny's Connect Logo" 
-                className="w-60 h-15 object-contain"
+                className="w-36 sm:w-48 md:w-60 h-auto object-contain"
               />
             </div>
-          <div className="hidden md:flex gap-6 font-semibold">
+          <div className="hidden lg:flex gap-6 font-semibold">
             <a href="/" className="hover:text-yellow-400 transition-colors">Home</a>
             <a href="/about-us" className="hover:text-yellow-400 transition-colors">About Us</a>
             <a href="/gallery" className="hover:text-yellow-400 transition-colors">Gallery</a>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-2 sm:gap-4 ml-auto lg:ml-0">
             <button 
               onClick={() => navigate('/login')} 
-              className="px-4 py-2 text-blue-900 bg-yellow-400 hover:bg-yellow-500 rounded font-bold transition-colors"
+              className="px-3 py-2 md:px-4 text-sm md:text-base text-blue-900 bg-yellow-400 hover:bg-yellow-500 rounded font-bold transition-colors whitespace-nowrap"
             >
               Login
             </button>
             <button 
               onClick={() => navigate('/signup')} 
-              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded font-bold transition-colors text-white"
+              className="px-3 py-2 md:px-4 text-sm md:text-base bg-orange-500 hover:bg-orange-600 rounded font-bold transition-colors text-white whitespace-nowrap"
             >
               Sign Up
             </button>
@@ -135,152 +83,228 @@ export default function Homepage() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <header className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h1 className="text-5xl font-extrabold mb-6 leading-tight text-blue-900">
-            We Help You Land the <span className="text-orange-500">Internship</span>, You Build the <span className="text-yellow-500">Future</span>.
+      {/* Hero Carousel Section */}
+      <header className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+        {/* Background Images */}
+        {CAROUSEL_IMAGES.map((img, index) => (
+          <div 
+            key={index}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+              index === currentSlide ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="absolute inset-0 bg-blue-900/60 z-10"></div> {/* Dark Overlay */}
+            <img 
+              src={img} 
+              alt={`Slide ${index + 1}`} 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+
+        {/* Carousel Content */}
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 md:px-8 mt-8 md:mt-0">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold mb-4 md:mb-6 leading-tight text-white max-w-4xl drop-shadow-lg">
+            Paid Internship <br className="hidden sm:block"/>
+            <span className="text-yellow-400 sm:mt-2 block text-2xl sm:text-3xl md:text-5xl">We Help You Land the Internship, You Build the Future.</span>
           </h1>
-          <p className="text-lg text-blue-700 mb-8 font-medium">
-            Connecting Zambian students to top universities globally. Now powered by next-generation AI to make your study abroad, flight booking, and internship journey seamless and personalized.
+          <p className="text-base sm:text-lg md:text-xl text-blue-100 mb-6 md:mb-8 font-medium max-w-2xl drop-shadow-md px-2">
+            Connecting Zambian students to top universities globally. Seamless study abroad, flight booking, and internship journeys.
           </p>
-          <div className="flex gap-4">
-            {/* The "Apply Now" button can also route to signup for new users */}
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4 sm:px-0">
             <button 
               onClick={() => navigate('/signup')}
-              className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-lg shadow-lg shadow-blue-300 transition-all transform hover:-translate-y-1"
+              className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-bold text-base md:text-lg shadow-lg transition-all transform hover:-translate-y-1"
             >
-              Apply Now
+              Get Started
             </button>
-            <button className="px-8 py-4 bg-yellow-400 hover:bg-yellow-500 text-blue-900 rounded-lg font-bold text-lg shadow-lg shadow-yellow-200 transition-all transform hover:-translate-y-1">
+            <button className="w-full sm:w-auto px-6 md:px-8 py-3 md:py-4 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white border border-white/50 rounded-lg font-bold text-base md:text-lg shadow-lg transition-all transform hover:-translate-y-1">
               Watch Our Process
             </button>
           </div>
         </div>
-        <div className="flex justify-center">
-          <AiActionAnimation />
+
+        {/* Carousel Controls (Hidden on very small screens for cleaner UI) */}
+        <button 
+          onClick={prevSlide}
+          className="hidden sm:block absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition backdrop-blur-sm"
+        >
+          <ChevronLeft size={28} md={36} />
+        </button>
+        <button 
+          onClick={nextSlide}
+          className="hidden sm:block absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition backdrop-blur-sm"
+        >
+          <ChevronRight size={28} md={36} />
+        </button>
+
+        {/* Indicators */}
+        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+          {CAROUSEL_IMAGES.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`h-2 md:h-3 rounded-full transition-all ${idx === currentSlide ? 'bg-orange-500 w-6 md:w-8' : 'bg-white/50 hover:bg-white w-2 md:w-3'}`}
+            />
+          ))}
         </div>
       </header>
 
       {/* AI Features Section */}
-      <section className="bg-blue-900 py-16 px-4">
+      <section className="bg-blue-900 py-12 md:py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4 flex items-center justify-center gap-2">
-              <Sparkles className="text-yellow-400" /> 
+          <div className="text-center mb-10 md:mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 flex items-center justify-center gap-2">
+              <Sparkles className="text-yellow-400" size={24} /> 
               Supercharged by AI
-              <Sparkles className="text-yellow-400" />
+              <Sparkles className="text-yellow-400" size={24} />
             </h2>
-            <p className="text-blue-200 max-w-2xl mx-auto">Experience a faster, smarter, and highly personalized application process with our new integrated AI features.</p>
+            <p className="text-sm md:text-base text-blue-200 max-w-2xl mx-auto">Experience a faster, smarter, and highly personalized application process with our new integrated AI features.</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-all duration-300">
-              <div className="bg-orange-500 w-14 h-14 rounded-lg flex items-center justify-center mb-6">
-                <Bot className="text-white" size={28} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="bg-blue-800 border border-blue-700 p-6 md:p-8 rounded-xl hover:border-orange-500 transition-all duration-300">
+              <div className="bg-orange-500 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center mb-4 md:mb-6">
+                <Bot className="text-white" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Consultation Bot</h3>
-              <p className="text-blue-200">24/7 personalized guidance. Answers FAQs, explains the application process, and recommends paths based on your academic goals.</p>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">Consultation Bot</h3>
+              <p className="text-sm md:text-base text-blue-200">24/7 personalized guidance. Answers FAQs, explains the application process, and recommends paths based on your academic goals.</p>
             </div>
             
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-yellow-400 transition-all duration-300">
-              <div className="bg-yellow-400 w-14 h-14 rounded-lg flex items-center justify-center mb-6">
-                <FileCheck className="text-blue-900" size={28} />
+            <div className="bg-blue-800 border border-blue-700 p-6 md:p-8 rounded-xl hover:border-yellow-400 transition-all duration-300">
+              <div className="bg-yellow-400 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center mb-4 md:mb-6">
+                <FileCheck className="text-blue-900" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Automated Processing</h3>
-              <p className="text-blue-200">Smart tools automatically scan, verify, and organize your documents, minimizing human error and accelerating submissions.</p>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">Automated Processing</h3>
+              <p className="text-sm md:text-base text-blue-200">Smart tools automatically scan, verify, and organize your documents, minimizing human error and accelerating submissions.</p>
             </div>
 
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-all duration-300">
-              <div className="bg-orange-500 w-14 h-14 rounded-lg flex items-center justify-center mb-6">
-                <Globe className="text-white" size={28} />
+            <div className="bg-blue-800 border border-blue-700 p-6 md:p-8 rounded-xl hover:border-orange-500 transition-all duration-300 sm:col-span-2 md:col-span-1">
+              <div className="bg-orange-500 w-12 h-12 md:w-14 md:h-14 rounded-lg flex items-center justify-center mb-4 md:mb-6">
+                <Globe className="text-white" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-3">Matching Engine</h3>
-              <p className="text-blue-200">Our AI analyzes your unique profile to automatically match you with the perfect scholarships and paid international internships.</p>
+              <h3 className="text-lg md:text-xl font-bold text-white mb-2 md:mb-3">Matching Engine</h3>
+              <p className="text-sm md:text-base text-blue-200">Our AI analyzes your unique profile to automatically match you with the perfect scholarships and paid international internships.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Traditional Services Section */}
-      <section className="py-16 px-4 max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-blue-900 mb-4">Our Core Services</h2>
-          <p className="text-blue-700 font-medium">Real guidance, real opportunities across the globe.</p>
+      <section className="py-12 md:py-16 px-4 max-w-6xl mx-auto">
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2 md:mb-4">Our Core Services</h2>
+          <p className="text-sm md:text-base text-blue-700 font-medium">Real guidance, real opportunities across the globe.</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-white p-8 rounded-xl shadow-md border-l-4 border-yellow-400 flex gap-6 items-start">
-            <div className="p-3 bg-blue-100 rounded-full text-blue-600">
-              <GraduationCap size={32} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-yellow-400 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+            <div className="p-3 bg-blue-100 rounded-full text-blue-600 self-start">
+              <GraduationCap size={28} />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">Study Abroad & Scholarships</h3>
-              <p className="text-blue-800">Get connected to top universities abroad, with guidance on institutions that offer scholarships or education loans to eligible students.</p>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Study Abroad & Scholarships</h3>
+              <p className="text-sm md:text-base text-blue-800">Get connected to top universities abroad, with guidance on institutions that offer scholarships or education loans to eligible students.</p>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md border-l-4 border-orange-500 flex gap-6 items-start">
-            <div className="p-3 bg-orange-100 rounded-full text-orange-600">
-              <Plane size={32} />
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-orange-500 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+            <div className="p-3 bg-orange-100 rounded-full text-orange-600 self-start">
+              <Plane size={28} />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">Flight Ticket Booking</h3>
-              <p className="text-blue-800">We help you find affordable and convenient flight options for students and travelers heading abroad for studies, work, or tours.</p>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Flight Ticket Booking</h3>
+              <p className="text-sm md:text-base text-blue-800">We help you find affordable and convenient flight options for students and travelers heading abroad for studies, work, or tours.</p>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md border-l-4 border-blue-600 flex gap-6 items-start">
-            <div className="p-3 bg-blue-100 rounded-full text-blue-600">
-              <Briefcase size={32} />
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-blue-600 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+            <div className="p-3 bg-blue-100 rounded-full text-blue-600 self-start">
+              <Briefcase size={28} />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">Work Abroad</h3>
-              <p className="text-blue-800">Get assistance with finding and applying for job opportunities in trusted countries, with guidance on visa and relocation processes.</p>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Work Abroad</h3>
+              <p className="text-sm md:text-base text-blue-800">Get assistance with finding and applying for job opportunities in trusted countries, with guidance on visa and relocation processes.</p>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-xl shadow-md border-l-4 border-yellow-400 flex gap-6 items-start">
-            <div className="p-3 bg-yellow-100 rounded-full text-yellow-600">
-              <Globe size={32} />
+          <div className="bg-white p-6 md:p-8 rounded-xl shadow-md border-l-4 border-yellow-400 flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+            <div className="p-3 bg-yellow-100 rounded-full text-yellow-600 self-start">
+              <Globe size={28} />
             </div>
             <div>
-              <h3 className="text-xl font-bold mb-2">Paid Internships Abroad</h3>
-              <p className="text-blue-800">Access international internship opportunities that offer real-world experience—and a paycheck—across various industries and countries.</p>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Paid Internships Abroad</h3>
+              <p className="text-sm md:text-base text-blue-800">Access international internship opportunities that offer real-world experience—and a paycheck—across various industries and countries.</p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Testimonials / Video Proof Section */}
+      <section className="py-12 md:py-16 bg-white px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8 md:mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-blue-900 mb-2 md:mb-4 px-4">We Don't Just Talk, We Deliver</h2>
+            <div className="w-16 md:w-24 h-1 bg-orange-500 mx-auto rounded"></div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+            {TESTIMONIALS.map((video) => (
+              <div key={video.id} className="group relative rounded-xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all aspect-[3/4]">
+                {/* Thumbnail Image */}
+                <img 
+                  src={video.thumbnail} 
+                  alt={`Student Testimonial ${video.id}`} 
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                
+                {/* Dark Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                {/* Play Button Icon */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all">
+                  <PlayCircle size={48} className="text-white drop-shadow-md" />
+                </div>
+
+                {/* Duration Badge */}
+                <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white text-xs font-semibold px-2 py-1 rounded">
+                  {video.duration}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA / Footer */}
-      <footer className="bg-blue-950 text-blue-200 py-12 px-4 border-t-8 border-orange-500">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+      <footer className="bg-blue-950 text-blue-200 py-10 md:py-12 px-4 border-t-8 border-orange-500">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold text-yellow-400 mb-4">Dreaming of studying abroad?</h2>
-            <p className="mb-6">Danny's Connect links Zambian students to universities across India, Europe, China, and more.</p>
-            <div className="flex gap-4">
+            <h2 className="text-2xl md:text-3xl font-bold text-yellow-400 mb-3 md:mb-4">Dreaming of studying abroad?</h2>
+            <p className="mb-6 text-sm md:text-base">Danny's Connect links Zambian students to universities across India, Europe, China, and more.</p>
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <input 
                 type="email" 
                 placeholder="example@gmail.com" 
-                className="px-4 py-3 rounded text-blue-900 w-full max-w-xs focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-4 py-3 rounded text-blue-900 w-full sm:max-w-xs focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
-              <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded transition-colors">
+              <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-6 py-3 rounded transition-colors w-full sm:w-auto">
                 Subscribe
               </button>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 text-sm font-medium">
-            <div className="flex flex-col gap-2">
-              <a href="/about-us" className="hover:text-yellow-400">About Us</a>
-              <a href="/for-students" className="hover:text-yellow-400">For Students</a>
-              <a href="/for-universities" className="hover:text-yellow-400">For Universities</a>
-              <a href="/blog" className="hover:text-yellow-400">Blog</a>
+          <div className="grid grid-cols-2 gap-4 text-sm md:text-base font-medium pt-6 md:pt-0 border-t md:border-t-0 border-blue-800">
+            <div className="flex flex-col gap-3">
+              <a href="/about-us" className="hover:text-yellow-400 transition-colors">About Us</a>
+              <a href="/for-students" className="hover:text-yellow-400 transition-colors">For Students</a>
+              <a href="/for-universities" className="hover:text-yellow-400 transition-colors">For Universities</a>
+              <a href="/blog" className="hover:text-yellow-400 transition-colors">Blog</a>
             </div>
-            <div className="flex flex-col gap-2">
-              <a href="/privacy-policy" className="hover:text-orange-400">Privacy Policy</a>
-              <a href="/terms" className="hover:text-orange-400">Terms</a>
-              <a href="/conditions" className="hover:text-orange-400">Conditions</a>
-              <a href="/help" className="hover:text-orange-400">Help</a>
+            <div className="flex flex-col gap-3">
+              <a href="/privacy-policy" className="hover:text-orange-400 transition-colors">Privacy Policy</a>
+              <a href="/terms" className="hover:text-orange-400 transition-colors">Terms</a>
+              <a href="/conditions" className="hover:text-orange-400 transition-colors">Conditions</a>
+              <a href="/help" className="hover:text-orange-400 transition-colors">Help</a>
             </div>
           </div>
         </div>
