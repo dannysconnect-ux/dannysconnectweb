@@ -15,15 +15,18 @@ from services.llm_chatbot import generate_chat_response
 app = FastAPI(title="Danny's Connect AI Backend")
 
 # Allow your React frontend to communicate with this backend
+# Allow your React frontend to communicate with this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], # Your Vite React port
+    allow_origins=[
+        "http://localhost:5173",          # Local development
+        "https://dannysconnect.com",      # Live website
+        "https://www.dannysconnect.com"   # Live website (www version)
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-client = genai.Client()
 
 # Pydantic Models for Data Validation
 class ChatMessage(BaseModel):
