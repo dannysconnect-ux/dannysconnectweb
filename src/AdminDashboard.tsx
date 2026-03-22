@@ -23,7 +23,7 @@ export default function AdminDashboard() {
   // Admin Email to receive copies
   const ADMIN_EMAIL = "dannysconnect@gmail.com"; 
 
-  // 🔥 Wait for Firebase Auth to load before fetching students
+  // Wait for Firebase Auth to load before fetching students
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -80,7 +80,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // 🔥 UPDATED: Now triggers an email and portal message to the student, and BCCs Admin
   const updateApplicationStatus = async (app: any, newStatus: string) => {
     if (!selectedStudent) return;
     try {
@@ -128,7 +127,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // 🔥 UPDATED: Now BCCs Admin on custom messages too
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedStudent || !messageTitle || !messageBody) return;
@@ -191,46 +189,46 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Admin Navbar */}
-      <nav className="bg-gray-900 text-white p-4 shadow-md flex justify-between items-center shrink-0">
-        <div className="text-xl font-bold text-orange-500 flex items-center gap-2">
-          Danny's Connect Admin
+      <nav className="bg-gray-900 text-white p-3 sm:p-4 shadow-md flex justify-between items-center shrink-0 sticky top-0 z-40">
+        <div className="text-lg sm:text-xl font-bold text-orange-500 flex items-center gap-2 truncate">
+          Danny's Connect <span className="hidden sm:inline">Admin</span>
         </div>
         <button onClick={handleLogout} className="flex items-center gap-2 text-sm hover:text-orange-400 transition-colors">
-          <LogOut size={18} /> Logout
+          <LogOut size={18} /> <span className="hidden sm:inline">Logout</span>
         </button>
       </nav>
 
-      <div className="max-w-7xl mx-auto p-6 w-full flex-1">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 w-full flex-1">
         
         {/* Stats Row */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
-              <Users size={28} />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
+            <div className="bg-blue-100 p-3 rounded-lg text-blue-600 shrink-0">
+              <Users size={24} className="sm:w-7 sm:h-7" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 font-semibold">Total Students</p>
-              <h3 className="text-2xl font-bold text-gray-900">{students.length}</h3>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold">Total Students</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{students.length}</h3>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-green-100 p-3 rounded-lg text-green-600">
-              <CheckCircle size={28} />
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
+            <div className="bg-green-100 p-3 rounded-lg text-green-600 shrink-0">
+              <CheckCircle size={24} className="sm:w-7 sm:h-7" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 font-semibold">Ready to Process</p>
-              <h3 className="text-2xl font-bold text-gray-900">{completedProfiles}</h3>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold">Ready to Process</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{completedProfiles}</h3>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-orange-100 p-3 rounded-lg text-orange-600">
-              <FileText size={28} />
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
+            <div className="bg-orange-100 p-3 rounded-lg text-orange-600 shrink-0">
+              <FileText size={24} className="sm:w-7 sm:h-7" />
             </div>
             <div>
-              <p className="text-sm text-gray-500 font-semibold">Pending Profiles</p>
-              <h3 className="text-2xl font-bold text-gray-900">{students.length - completedProfiles}</h3>
+              <p className="text-xs sm:text-sm text-gray-500 font-semibold">Pending Profiles</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{students.length - completedProfiles}</h3>
             </div>
           </div>
         </div>
@@ -238,21 +236,22 @@ export default function AdminDashboard() {
         {/* Students Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-            <h2 className="font-bold text-gray-800 text-lg">Student Roster</h2>
-            <button onClick={fetchStudents} className="text-sm text-blue-600 hover:underline">
+            <h2 className="font-bold text-gray-800 text-base sm:text-lg">Student Roster</h2>
+            <button onClick={fetchStudents} className="text-xs sm:text-sm text-blue-600 hover:underline">
               Refresh Data
             </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[500px] sm:min-w-full">
               <thead>
-                <tr className="bg-gray-100 text-gray-600 text-sm">
-                  <th className="p-4 font-semibold">Student Name</th>
-                  <th className="p-4 font-semibold">Program of Interest</th>
-                  <th className="p-4 font-semibold">Budget</th>
-                  <th className="p-4 font-semibold">Status</th>
-                  <th className="p-4 font-semibold text-center">Actions</th>
+                <tr className="bg-gray-100 text-gray-600 text-xs sm:text-sm">
+                  <th className="p-3 sm:p-4 font-semibold">Student Name</th>
+                  {/* Hidden on mobile to save space */}
+                  <th className="p-3 sm:p-4 font-semibold hidden md:table-cell">Program of Interest</th>
+                  <th className="p-3 sm:p-4 font-semibold hidden lg:table-cell">Budget</th>
+                  <th className="p-3 sm:p-4 font-semibold">Status</th>
+                  <th className="p-3 sm:p-4 font-semibold text-center">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -263,44 +262,44 @@ export default function AdminDashboard() {
                 ) : (
                   students.map((student) => (
                     <tr key={student.id} className="border-b border-gray-100 hover:bg-gray-50 transition">
-                      <td className="p-4">
-                        <div className="font-bold text-gray-800">{student.name || 'N/A'}</div>
-                        <div className="text-xs text-gray-500">{student.email}</div>
+                      <td className="p-3 sm:p-4">
+                        <div className="font-bold text-gray-800 text-sm sm:text-base">{student.name || 'N/A'}</div>
+                        <div className="text-[10px] sm:text-xs text-gray-500 truncate max-w-[120px] sm:max-w-xs">{student.email}</div>
                       </td>
-                      <td className="p-4 text-sm text-gray-700">{student.programOfStudy || 'Not set'}</td>
-                      <td className="p-4 text-sm text-gray-700">{student.budget || 'Not set'}</td>
-                      <td className="p-4">
+                      <td className="p-3 sm:p-4 text-xs sm:text-sm text-gray-700 hidden md:table-cell">{student.programOfStudy || 'Not set'}</td>
+                      <td className="p-3 sm:p-4 text-xs sm:text-sm text-gray-700 hidden lg:table-cell">{student.budget || 'Not set'}</td>
+                      <td className="p-3 sm:p-4">
                         {student.applications && student.applications.length > 0 ? (
-                          <span className="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-full">Application Sent</span>
+                          <span className="bg-blue-100 text-blue-700 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap">App Sent</span>
                         ) : student.profileCompleted ? (
-                          <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full">Documents Ready</span>
+                          <span className="bg-green-100 text-green-700 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap">Docs Ready</span>
                         ) : (
-                          <span className="bg-yellow-100 text-yellow-700 text-xs font-bold px-2 py-1 rounded-full">Incomplete</span>
+                          <span className="bg-yellow-100 text-yellow-700 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap">Incomplete</span>
                         )}
                       </td>
-                      <td className="p-4 flex items-center justify-center gap-3">
+                      <td className="p-3 sm:p-4 flex items-center justify-center gap-1 sm:gap-3">
                         <a 
                           href={getWhatsAppLink(student.phone)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-green-500 hover:text-green-600 hover:bg-green-50 p-2 rounded-full transition tooltip"
+                          className="text-green-500 hover:text-green-600 hover:bg-green-50 p-1.5 sm:p-2 rounded-full transition"
                           title="Chat on WhatsApp"
                         >
-                          <MessageCircle size={20} />
+                          <MessageCircle size={18} className="sm:w-5 sm:h-5" />
                         </a>
                         <button 
                           onClick={() => setSelectedStudent(student)}
-                          className="text-orange-500 hover:text-orange-700 hover:bg-orange-50 p-2 rounded-full transition"
+                          className="text-orange-500 hover:text-orange-700 hover:bg-orange-50 p-1.5 sm:p-2 rounded-full transition"
                           title="View Documents"
                         >
-                          <Folder size={20} />
+                          <Folder size={18} className="sm:w-5 sm:h-5" />
                         </button>
                         <button 
                           onClick={() => setSelectedStudent(student)}
-                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2 rounded-full transition"
+                          className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-1.5 sm:p-2 rounded-full transition"
                           title="View Full Profile"
                         >
-                          <Eye size={20} />
+                          <Eye size={18} className="sm:w-5 sm:h-5" />
                         </button>
                       </td>
                     </tr>
@@ -314,28 +313,28 @@ export default function AdminDashboard() {
 
       {/* --- STUDENT DETAILS MODAL --- */}
       {selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[95vh] md:max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95">
             
-            <div className="bg-gray-900 text-white p-5 flex justify-between items-center shrink-0">
-              <div>
-                <h2 className="font-bold text-xl">{selectedStudent.name}'s Profile</h2>
-                <p className="text-xs text-gray-400">UID: {selectedStudent.id}</p>
+            <div className="bg-gray-900 text-white p-4 sm:p-5 flex justify-between items-center shrink-0">
+              <div className="truncate pr-2">
+                <h2 className="font-bold text-lg sm:text-xl truncate">{selectedStudent.name}'s Profile</h2>
+                <p className="text-[10px] sm:text-xs text-gray-400 truncate">UID: {selectedStudent.id}</p>
               </div>
-              <button onClick={() => setSelectedStudent(null)} className="hover:text-red-400 transition">
+              <button onClick={() => setSelectedStudent(null)} className="hover:text-red-400 transition shrink-0 p-1">
                 <X size={24} />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-6">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-4 sm:gap-6">
               
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                   <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Contact Details</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-700">
-                    <p className="flex items-center gap-2"><Mail size={16} className="text-gray-400"/> {selectedStudent.email}</p>
-                    <p className="flex items-center gap-2"><Phone size={16} className="text-gray-400"/> {selectedStudent.phone || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><MapPin size={16} className="text-gray-400"/> {selectedStudent.city || 'N/A'}, {selectedStudent.address || 'N/A'}</p>
+                    <p className="flex items-center gap-2 truncate"><Mail size={16} className="text-gray-400 shrink-0"/> <span className="truncate">{selectedStudent.email}</span></p>
+                    <p className="flex items-center gap-2"><Phone size={16} className="text-gray-400 shrink-0"/> {selectedStudent.phone || 'N/A'}</p>
+                    <p className="flex items-center gap-2 truncate"><MapPin size={16} className="text-gray-400 shrink-0"/> <span className="truncate">{selectedStudent.city || 'N/A'}, {selectedStudent.address || 'N/A'}</span></p>
                   </div>
                   
                   {/* Communication Action Buttons */}
@@ -344,7 +343,7 @@ export default function AdminDashboard() {
                        <a 
                          href={getWhatsAppLink(selectedStudent.phone)}
                          target="_blank" rel="noopener noreferrer"
-                         className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold py-2 px-4 rounded-lg transition"
+                         className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white text-sm font-bold py-2 sm:py-2.5 px-4 rounded-lg transition w-full"
                        >
                          <MessageCircle size={16} /> Chat on WhatsApp
                        </a>
@@ -355,7 +354,7 @@ export default function AdminDashboard() {
                         setMessageBody('');
                         setIsMessageModalOpen(true);
                       }}
-                      className="flex items-center justify-center gap-2 bg-blue-900 hover:bg-blue-800 text-white text-sm font-bold py-2 px-4 rounded-lg transition"
+                      className="flex items-center justify-center gap-2 bg-blue-900 hover:bg-blue-800 text-white text-sm font-bold py-2 sm:py-2.5 px-4 rounded-lg transition w-full"
                     >
                       <Bell size={16} className="text-yellow-400" /> Send Portal Update
                     </button>
@@ -365,10 +364,10 @@ export default function AdminDashboard() {
                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                   <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Study Preferences</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-700">
-                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-gray-400"/> <strong>Program:</strong> {selectedStudent.programOfStudy || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><DollarSign size={16} className="text-gray-400"/> <strong>Budget:</strong> {selectedStudent.budget || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><Globe size={16} className="text-gray-400"/> <strong>Country:</strong> {selectedStudent.preferredCountry || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><Briefcase size={16} className="text-gray-400"/> <strong>IAESTE Account:</strong> {selectedStudent.iaesteAccount || 'N/A'}</p>
+                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-gray-400 shrink-0"/> <strong>Program:</strong> <span className="truncate">{selectedStudent.programOfStudy || 'N/A'}</span></p>
+                    <p className="flex items-center gap-2"><DollarSign size={16} className="text-gray-400 shrink-0"/> <strong>Budget:</strong> {selectedStudent.budget || 'N/A'}</p>
+                    <p className="flex items-center gap-2"><Globe size={16} className="text-gray-400 shrink-0"/> <strong>Country:</strong> <span className="truncate">{selectedStudent.preferredCountry || 'N/A'}</span></p>
+                    <p className="flex items-center gap-2"><Briefcase size={16} className="text-gray-400 shrink-0"/> <strong>IAESTE Account:</strong> {selectedStudent.iaesteAccount || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -377,48 +376,48 @@ export default function AdminDashboard() {
               {selectedStudent.applications && selectedStudent.applications.length > 0 && (
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-200">
                   <h3 className="font-bold text-blue-900 mb-3 border-b border-blue-200 pb-2 flex items-center gap-2">
-                    <Building size={20} /> Submitted Applications
+                    <Building size={20} className="shrink-0" /> Submitted Applications
                   </h3>
                   <div className="flex flex-col gap-3">
                     {selectedStudent.applications.map((app: any) => (
-                      <div key={app.id} className="bg-white p-4 rounded-lg border border-blue-100 flex flex-col gap-2">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <p className="text-sm font-bold text-gray-800">{app.university}</p>
-                            <p className="text-sm text-blue-700">{app.program}</p>
+                      <div key={app.id} className="bg-white p-3 sm:p-4 rounded-lg border border-blue-100 flex flex-col gap-3">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
+                          <div className="w-full sm:w-auto">
+                            <p className="text-sm font-bold text-gray-800 leading-tight">{app.university}</p>
+                            <p className="text-xs sm:text-sm text-blue-700 mt-0.5">{app.program}</p>
                           </div>
-                          <span className={`px-2 py-1 text-xs font-bold rounded-full ${
-                            app.status === 'Processed' ? 'bg-green-100 text-green-700' :
-                            app.status === 'Under Review' ? 'bg-yellow-100 text-yellow-700' :
-                            'bg-gray-100 text-gray-700'
+                          <span className={`px-2 py-1 text-[10px] sm:text-xs font-bold rounded-full border shrink-0 ${
+                            app.status === 'Processed' ? 'bg-green-100 text-green-700 border-green-200' :
+                            app.status === 'Under Review' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+                            'bg-gray-100 text-gray-700 border-gray-200'
                           }`}>
                             {app.status || 'Pending'}
                           </span>
                         </div>
                         
                         {/* Status Update & Message Buttons */}
-                        <div className="flex gap-2 mt-2 border-t pt-2 items-center flex-wrap">
+                        <div className="flex flex-col sm:flex-row gap-2 mt-1 sm:mt-2 border-t pt-3 sm:pt-2 items-stretch sm:items-center w-full">
                           <button 
                             onClick={() => updateApplicationStatus(app, 'Under Review')}
-                            className="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-1 px-3 rounded transition"
+                            className="text-xs bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-1.5 sm:py-1 px-3 rounded transition text-center"
                           >
                             Mark Under Review
                           </button>
                           <button 
                             onClick={() => updateApplicationStatus(app, 'Processed')}
-                            className="text-xs bg-green-100 hover:bg-green-200 text-green-800 py-1 px-3 rounded transition"
+                            className="text-xs bg-green-100 hover:bg-green-200 text-green-800 py-1.5 sm:py-1 px-3 rounded transition text-center"
                           >
                             Mark Processed
                           </button>
                           
-                          {/* 🔥 NEW: App-Specific Message Button */}
+                          {/* App-Specific Message Button */}
                           <button
                             onClick={() => {
                               setMessageTitle(`Update on your application: ${app.university}`);
                               setMessageBody('');
                               setIsMessageModalOpen(true);
                             }}
-                            className="text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 py-1 px-3 rounded transition flex items-center gap-1 ml-auto"
+                            className="text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 py-1.5 sm:py-1 px-3 rounded transition flex items-center justify-center gap-1 sm:ml-auto mt-2 sm:mt-0"
                           >
                             <MessageCircle size={14} /> Message
                           </button>
@@ -429,8 +428,6 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              {/* Documents Section */}
-              {/* ... (Documents Section code remains unchanged) ... */}
               <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                 <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
                   <FolderOpen className="text-orange-500" size={20} /> 
@@ -440,12 +437,12 @@ export default function AdminDashboard() {
                 {!selectedStudent.documents || Object.keys(selectedStudent.documents).length === 0 ? (
                   <p className="text-sm text-gray-500 italic">This student has not uploaded any documents yet.</p>
                 ) : (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     {Object.entries(selectedStudent.documents).map(([docKey, url]) => (
-                      <div key={docKey} className="border border-gray-200 p-3 rounded-lg flex items-center justify-between bg-gray-50">
-                        <div className="flex items-center gap-2 overflow-hidden">
-                          <FileText className="text-orange-500 shrink-0" size={20} />
-                          <span className="text-xs font-bold text-gray-700 truncate capitalize">
+                      <div key={docKey} className="border border-gray-200 p-3 rounded-lg flex items-center justify-between bg-gray-50 w-full overflow-hidden">
+                        <div className="flex items-center gap-2 overflow-hidden w-full">
+                          <FileText className="text-orange-500 shrink-0" size={18} />
+                          <span className="text-xs font-bold text-gray-700 truncate capitalize flex-1">
                             {docKey.replace('_', ' ')}
                           </span>
                         </div>
@@ -453,7 +450,7 @@ export default function AdminDashboard() {
                           href={url as string} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:bg-blue-100 p-2 rounded transition shrink-0"
+                          className="text-blue-600 hover:bg-blue-100 p-1.5 sm:p-2 rounded transition shrink-0 ml-2"
                           title="View / Download"
                         >
                           <Download size={16} />
@@ -471,25 +468,25 @@ export default function AdminDashboard() {
 
       {/* --- SEND MESSAGE MODAL (Overlaps the Student Profile) --- */}
       {isMessageModalOpen && selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] p-2 sm:p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95">
             <div className="bg-blue-900 text-white p-4 flex justify-between items-center">
-              <h3 className="font-bold flex items-center gap-2">
-                <Send size={18} className="text-yellow-400" /> Message {selectedStudent.name}
+              <h3 className="font-bold flex items-center gap-2 text-sm sm:text-base">
+                <Send size={18} className="text-yellow-400 shrink-0" /> <span className="truncate">Message {selectedStudent.name}</span>
               </h3>
-              <button onClick={() => setIsMessageModalOpen(false)} className="hover:text-red-400">
+              <button onClick={() => setIsMessageModalOpen(false)} className="hover:text-red-400 p-1 shrink-0">
                 <X size={20} />
               </button>
             </div>
             
-            <form onSubmit={handleSendMessage} className="p-5 flex flex-col gap-4">
+            <form onSubmit={handleSendMessage} className="p-4 sm:p-5 flex flex-col gap-4">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-1">Subject / Title</label>
                 <input 
                   type="text"
                   required
                   placeholder="e.g., Application Status Update"
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none text-sm"
                   value={messageTitle}
                   onChange={(e) => setMessageTitle(e.target.value)}
                 />
@@ -501,24 +498,24 @@ export default function AdminDashboard() {
                   required
                   rows={4}
                   placeholder="Type your update here..."
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none resize-none text-sm"
                   value={messageBody}
                   onChange={(e) => setMessageBody(e.target.value)}
                 ></textarea>
               </div>
 
-              <div className="flex gap-3 justify-end mt-2">
+              <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 justify-end mt-2">
                 <button 
                   type="button"
                   onClick={() => setIsMessageModalOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded font-semibold transition"
+                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded font-semibold transition w-full sm:w-auto text-sm"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit"
                   disabled={sendingMessage}
-                  className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded font-bold transition flex items-center gap-2 disabled:opacity-50"
+                  className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded font-bold transition flex items-center justify-center gap-2 disabled:opacity-50 w-full sm:w-auto text-sm"
                 >
                   {sendingMessage ? 'Sending...' : 'Send Notification'}
                 </button>

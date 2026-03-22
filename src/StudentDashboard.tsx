@@ -10,11 +10,8 @@ import { auth, db } from './firebase';
 import Chatbot from './components/Chatbot'; 
 import Application from './components/Application'; 
 
-
-
 const API_BASE_URL = import.meta.env?.VITE_API_BASE || 
   (window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'https://dannysconnect-938159032176.us-central1.run.app');
-
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -201,14 +198,16 @@ export default function Dashboard() {
   const unreadCount = myMessages.filter(m => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-blue-50 relative">
-      <nav className="bg-blue-900 text-white p-4 shadow-md flex justify-between items-center">
-        <div className="text-xl font-bold text-yellow-400 flex items-center gap-2">
-          <Globe className="text-orange-500" />
-          Student Dashboard
+    <div className="min-h-screen bg-blue-50 relative overflow-x-hidden">
+      {/* MOBILE-RESPONSIVE NAVBAR */}
+      <nav className="bg-blue-900 text-white p-4 shadow-md flex justify-between items-center sticky top-0 z-40">
+        <div className="text-lg sm:text-xl font-bold text-yellow-400 flex items-center gap-2 truncate">
+          <Globe className="text-orange-500 shrink-0" />
+          <span className="hidden sm:inline">Student Dashboard</span>
+          <span className="sm:hidden">Portal</span>
         </div>
         
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 sm:gap-6">
           <button onClick={handleOpenInbox} className="relative flex items-center gap-2 text-sm hover:text-yellow-400 transition-colors">
             {unreadCount > 0 ? <BellRing className="text-yellow-400 animate-pulse" size={20} /> : <Bell size={20} />}
             {unreadCount > 0 && (
@@ -218,98 +217,105 @@ export default function Dashboard() {
             )}
           </button>
 
-          <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm hover:text-yellow-400 transition-colors border-l border-blue-700 pl-6">
-            <Settings size={18} /> Settings
+          <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 text-sm hover:text-yellow-400 transition-colors border-l border-blue-700 pl-3 sm:pl-6">
+            <Settings size={18} /> <span className="hidden sm:inline">Settings</span>
           </button>
-          <button onClick={handleLogout} className="flex items-center gap-2 text-sm hover:text-orange-400 transition-colors border-l border-blue-700 pl-6">
-            <LogOut size={18} /> Logout
+          
+          <button onClick={handleLogout} className="flex items-center gap-2 text-sm hover:text-orange-400 transition-colors border-l border-blue-700 pl-3 sm:pl-6">
+            <LogOut size={18} /> <span className="hidden sm:inline">Logout</span>
           </button>
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto p-6 mt-8">
-        <h1 className="text-3xl font-bold text-blue-900 mb-2">
+      <div className="max-w-6xl mx-auto p-4 sm:p-6 mt-2 sm:mt-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-2">
           {loading ? 'Loading your portal...' : `Welcome, ${userName}!`}
         </h1>
-        <p className="text-blue-700 mb-6">Your AI assistant is ready to help you find the best opportunities.</p>
+        <p className="text-blue-700 text-sm sm:text-base mb-6">Your AI assistant is ready to help you find the best opportunities.</p>
 
-        {/* Application Status Banner */}
-        <div className="grid md:grid-cols-3 gap-4 mb-8">
+        {/* Application Status Banner - Stack on mobile, grid on larger screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
           <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-blue-100 p-3 rounded-lg text-blue-600">
+            <div className="bg-blue-100 p-3 rounded-lg text-blue-600 shrink-0">
               <FileText size={24} />
             </div>
             <div>
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Applications Sent</p>
-              <h3 className="text-2xl font-bold text-gray-900">{totalSent}</h3>
+              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Applications</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{totalSent}</h3>
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-yellow-100 p-3 rounded-lg text-yellow-600">
+            <div className="bg-yellow-100 p-3 rounded-lg text-yellow-600 shrink-0">
               <Eye size={24} />
             </div>
             <div>
               <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Under Review</p>
-              <h3 className="text-2xl font-bold text-gray-900">{underReview}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{underReview}</h3>
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex items-center gap-4">
-            <div className="bg-green-100 p-3 rounded-lg text-green-600">
+            <div className="bg-green-100 p-3 rounded-lg text-green-600 shrink-0">
               <CheckCircle size={24} />
             </div>
             <div>
               <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Processed</p>
-              <h3 className="text-2xl font-bold text-gray-900">{processed}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{processed}</h3>
             </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        {/* Main Actions - Stack on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          
           {/* Profile Card */}
-          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-orange-500">
-            <h3 className="font-bold text-lg mb-2 text-blue-900">Application Profile</h3>
-            {userProfile?.profileCompleted ? (
-              <p className="text-green-600 text-sm font-semibold">Profile updated! AI is ready to match you.</p>
-            ) : (
-              <p className="text-blue-600 text-sm">You haven't updated your academic profile yet.</p>
-            )}
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-md border-t-4 border-orange-500 flex flex-col justify-between">
+            <div>
+              <h3 className="font-bold text-lg mb-2 text-blue-900">Application Profile</h3>
+              {userProfile?.profileCompleted ? (
+                <p className="text-green-600 text-sm font-semibold mb-4">Profile updated! AI is ready to match you.</p>
+              ) : (
+                <p className="text-blue-600 text-sm mb-4">You haven't updated your academic profile yet.</p>
+              )}
+            </div>
             <button 
               onClick={() => setIsAppOpen(true)}
-              className="mt-4 text-orange-500 font-bold text-sm hover:underline"
+              className="mt-auto text-orange-500 font-bold text-sm hover:underline self-start"
             >
               {userProfile?.profileCompleted ? 'Edit Profile & Documents' : 'Complete Profile'}
             </button>
           </div>
 
           {/* AI Matches Card */}
-          <div className="bg-white p-6 rounded-xl shadow-md border-t-4 border-yellow-400">
-            <h3 className="font-bold text-lg mb-2 text-blue-900 flex items-center gap-2">
-              <Sparkles className="text-yellow-500" size={20} /> AI Matches
-            </h3>
-            <p className="text-blue-600 text-sm mb-4">
-              {userProfile?.programOfStudy 
-                ? `Destination: ${userProfile?.preferredCountry || 'Any'}` 
-                : 'Complete profile to unlock matches.'}
-            </p>
+          <div className="bg-white p-5 sm:p-6 rounded-xl shadow-md border-t-4 border-yellow-400 flex flex-col justify-between">
+            <div>
+              <h3 className="font-bold text-lg mb-2 text-blue-900 flex items-center gap-2">
+                <Sparkles className="text-yellow-500" size={20} /> AI Matches
+              </h3>
+              <p className="text-blue-600 text-sm mb-4">
+                {userProfile?.programOfStudy 
+                  ? `Destination: ${userProfile?.preferredCountry || 'Any'}` 
+                  : 'Complete profile to unlock matches.'}
+              </p>
+            </div>
             <button 
                onClick={handleFindMatches}
                disabled={!userProfile?.profileCompleted || loadingMatches}
-               className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2 px-4 rounded w-full transition disabled:opacity-50 flex items-center justify-center gap-2"
+               className="mt-auto bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2.5 px-4 rounded transition disabled:opacity-50 flex items-center justify-center gap-2 w-full"
             >
-               {loadingMatches ? <><Bot className="animate-spin" size={18}/> Scanning Universities...</> : 'Find My Best Matches'}
+               {loadingMatches ? <><Bot className="animate-spin" size={18}/> Scanning...</> : 'Find My Matches'}
             </button>
           </div>
 
           {/* Chatbot Card */}
-          <div className="bg-blue-900 p-6 rounded-xl shadow-md text-white flex flex-col items-center justify-center text-center">
+          <div className="bg-blue-900 p-5 sm:p-6 rounded-xl shadow-md text-white flex flex-col items-center justify-center text-center">
             <Bot size={40} className="text-yellow-400 mb-3 animate-bounce" />
             <h3 className="font-bold text-lg mb-2">Talk to AI Assistant</h3>
-            <p className="text-blue-200 text-sm mb-4">Get 24/7 help with your applications and flights.</p>
+            <p className="text-blue-200 text-sm mb-4">Get 24/7 help with applications.</p>
             <button 
               onClick={() => setIsChatOpen(true)}
-              className="bg-orange-500 px-4 py-2 rounded font-bold text-sm hover:bg-orange-600 transition"
+              className="mt-auto w-full bg-orange-500 py-2.5 rounded font-bold text-sm hover:bg-orange-600 transition"
             >
               Open Chat
             </button>
@@ -318,17 +324,17 @@ export default function Dashboard() {
 
         {/* Display Matches Section */}
         {matches.length > 0 && (
-          <div className="bg-white p-6 rounded-xl shadow-md border border-blue-100 animate-in fade-in slide-in-from-bottom-4">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2">
-              <Sparkles className="text-orange-500" /> Recommended Programs For You
+          <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-blue-100 animate-in fade-in slide-in-from-bottom-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-blue-900 mb-4 flex items-center gap-2">
+              <Sparkles className="text-orange-500" /> Recommended For You
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {matches.map((match, idx) => (
-                <div key={idx} className="border border-gray-200 p-5 rounded-xl hover:shadow-xl transition flex flex-col justify-between bg-gray-50 hover:bg-white">
+                <div key={idx} className="border border-gray-200 p-4 sm:p-5 rounded-xl hover:shadow-xl transition flex flex-col justify-between bg-gray-50 hover:bg-white">
                   <div>
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="font-bold text-lg text-blue-900 leading-tight pr-2">{match.program}</h3>
-                      <span className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full border shrink-0 ${getSuccessColor(match.success_rate)}`}>
+                    <div className="flex justify-between items-start mb-3 gap-2">
+                      <h3 className="font-bold text-base sm:text-lg text-blue-900 leading-tight">{match.program}</h3>
+                      <span className={`flex items-center gap-1 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-full border shrink-0 ${getSuccessColor(match.success_rate)}`}>
                         {match.success_rate}% Match
                       </span>
                     </div>
@@ -337,22 +343,22 @@ export default function Dashboard() {
                     
                     <div className="bg-blue-50 rounded-lg p-3 mb-4 border border-blue-100">
                       <p className="text-xs font-bold text-blue-900 flex items-center gap-1 mb-1">
-                        <GraduationCap size={14} /> Financial Aid / Scholarships
+                        <GraduationCap size={14} /> Scholarships
                       </p>
                       <p className="text-xs text-blue-700">{match.scholarship}</p>
                     </div>
 
-                    <p className="text-sm text-gray-600 mb-4">{match.reason}</p>
+                    <p className="text-xs sm:text-sm text-gray-600 mb-4">{match.reason}</p>
                   </div>
                   
                   {appliedPrograms.includes(match.program) ? (
-                    <button disabled className="mt-auto flex items-center justify-center gap-2 bg-green-100 text-green-700 font-bold py-2.5 px-4 rounded-lg w-full">
-                      <CheckCircle size={18} /> Application Sent
+                    <button disabled className="mt-auto flex items-center justify-center gap-2 bg-green-100 text-green-700 font-bold py-2.5 px-4 rounded-lg w-full text-sm">
+                      <CheckCircle size={18} /> Sent
                     </button>
                   ) : (
                     <button 
                       onClick={() => handleApply(match)}
-                      className="mt-auto bg-blue-900 hover:bg-blue-800 text-yellow-400 font-bold py-2.5 px-4 rounded-lg w-full transition shadow-md"
+                      className="mt-auto bg-blue-900 hover:bg-blue-800 text-yellow-400 font-bold py-2.5 px-4 rounded-lg w-full transition shadow-md text-sm sm:text-base"
                     >
                       Apply via Danny's Connect
                     </button>
@@ -383,30 +389,30 @@ export default function Dashboard() {
 
       {/* --- INBOX MODAL --- */}
       {isInboxOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95">
-            <div className="bg-blue-900 text-white p-5 flex justify-between items-center shrink-0">
-              <h2 className="font-bold text-xl flex items-center gap-2">
-                <Bell size={22} className="text-yellow-400"/> Notifications & Updates
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] md:max-h-[80vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95">
+            <div className="bg-blue-900 text-white p-4 sm:p-5 flex justify-between items-center shrink-0">
+              <h2 className="font-bold text-lg sm:text-xl flex items-center gap-2">
+                <Bell size={20} className="text-yellow-400"/> Notifications
               </h2>
-              <button onClick={() => setIsInboxOpen(false)} className="hover:text-red-400 transition">
+              <button onClick={() => setIsInboxOpen(false)} className="hover:text-red-400 transition p-1">
                 <X size={24} />
               </button>
             </div>
-            <div className="p-6 overflow-y-auto flex-1 bg-gray-50">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-gray-50">
               {myMessages.length === 0 ? (
                 <div className="text-center text-gray-500 mt-10">
                   <Bell size={40} className="mx-auto mb-3 text-gray-300" />
                   <p>No messages yet.</p>
-                  <p className="text-sm">When your application status updates, you will see it here.</p>
+                  <p className="text-sm mt-1">Updates on your application status will appear here.</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-3 sm:gap-4">
                   {myMessages.map((msg) => (
                     <div key={msg.id} className="bg-white p-4 rounded-xl shadow-sm border border-blue-100 relative">
-                      <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-bold text-blue-900">{msg.title}</h3>
-                        <span className="text-xs text-gray-400">
+                      <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-1 sm:gap-4">
+                        <h3 className="font-bold text-blue-900 text-sm sm:text-base">{msg.title}</h3>
+                        <span className="text-xs text-gray-400 shrink-0">
                           {msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : 'Just now'}
                         </span>
                       </div>
@@ -422,40 +428,40 @@ export default function Dashboard() {
 
       {/* --- SETTINGS MODAL --- */}
       {isSettingsOpen && userProfile && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-2 sm:p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
             
-            <div className="bg-blue-900 text-white p-5 flex justify-between items-center shrink-0">
-              <h2 className="font-bold text-xl flex items-center gap-2">
-                <Settings size={22} /> My Account Details
+            <div className="bg-blue-900 text-white p-4 sm:p-5 flex justify-between items-center shrink-0">
+              <h2 className="font-bold text-lg sm:text-xl flex items-center gap-2">
+                <Settings size={20} /> My Account
               </h2>
-              <button onClick={() => setIsSettingsOpen(false)} className="hover:text-red-400 transition">
+              <button onClick={() => setIsSettingsOpen(false)} className="hover:text-red-400 transition p-1">
                 <X size={24} />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-6">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 bg-gray-50 flex flex-col gap-4 sm:gap-6">
               
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Contact Info */}
                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                  <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">My Information</h3>
+                  <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Information</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-700">
-                    <p className="flex items-center gap-2"><Eye size={16} className="text-gray-400"/> <strong>Name:</strong> {userProfile.name}</p>
-                    <p className="flex items-center gap-2"><Mail size={16} className="text-gray-400"/> <strong>Email:</strong> {userProfile.email}</p>
-                    <p className="flex items-center gap-2"><Phone size={16} className="text-gray-400"/> <strong>Phone:</strong> {userProfile.phone || 'Not provided'}</p>
-                    <p className="flex items-center gap-2"><MapPin size={16} className="text-gray-400"/> <strong>Location:</strong> {userProfile.city ? `${userProfile.city}, ${userProfile.address}` : 'Not provided'}</p>
+                    <p className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap"><Eye size={16} className="text-gray-400 shrink-0"/> <strong>Name:</strong> {userProfile.name}</p>
+                    <p className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap"><Mail size={16} className="text-gray-400 shrink-0"/> <strong>Email:</strong> {userProfile.email}</p>
+                    <p className="flex items-center gap-2"><Phone size={16} className="text-gray-400 shrink-0"/> <strong>Phone:</strong> {userProfile.phone || 'Not provided'}</p>
+                    <p className="flex items-center gap-2"><MapPin size={16} className="text-gray-400 shrink-0"/> <strong>Location:</strong> {userProfile.city ? `${userProfile.city}, ${userProfile.address}` : 'Not provided'}</p>
                   </div>
                 </div>
 
                 {/* Study Preferences */}
                 <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
-                  <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">My Preferences</h3>
+                  <h3 className="font-bold text-gray-800 mb-3 border-b pb-2">Preferences</h3>
                   <div className="flex flex-col gap-2 text-sm text-gray-700">
-                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-gray-400"/> <strong>Program:</strong> {userProfile.programOfStudy || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><DollarSign size={16} className="text-gray-400"/> <strong>Budget:</strong> {userProfile.budget || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><Globe size={16} className="text-gray-400"/> <strong>Country:</strong> {userProfile.preferredCountry || 'N/A'}</p>
-                    <p className="flex items-center gap-2"><Briefcase size={16} className="text-gray-400"/> <strong>IAESTE Account:</strong> {userProfile.iaesteAccount || 'N/A'}</p>
+                    <p className="flex items-center gap-2"><BookOpen size={16} className="text-gray-400 shrink-0"/> <strong>Program:</strong> <span className="truncate">{userProfile.programOfStudy || 'N/A'}</span></p>
+                    <p className="flex items-center gap-2"><DollarSign size={16} className="text-gray-400 shrink-0"/> <strong>Budget:</strong> {userProfile.budget || 'N/A'}</p>
+                    <p className="flex items-center gap-2"><Globe size={16} className="text-gray-400 shrink-0"/> <strong>Country:</strong> <span className="truncate">{userProfile.preferredCountry || 'N/A'}</span></p>
+                    <p className="flex items-center gap-2"><Briefcase size={16} className="text-gray-400 shrink-0"/> <strong>IAESTE:</strong> {userProfile.iaesteAccount || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -463,27 +469,27 @@ export default function Dashboard() {
               {/* My Applications */}
               <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                 <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
-                  <Building className="text-blue-600" size={20} /> My Applications
+                  <Building className="text-blue-600" size={20} /> Applications
                 </h3>
                 {myApplications.length === 0 ? (
                   <p className="text-sm text-gray-500 italic">You haven't submitted any applications yet.</p>
                 ) : (
                   <div className="flex flex-col gap-3">
                     {myApplications.map((app: any) => (
-                      <div key={app.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                        <div>
-                          <p className="text-sm font-bold text-gray-800">{app.university}</p>
-                          <p className="text-sm text-blue-700">{app.program}</p>
+                      <div key={app.id} className="bg-gray-50 p-3 sm:p-4 rounded-lg border border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div className="w-full sm:w-auto">
+                          <p className="text-sm font-bold text-gray-800 break-words">{app.university}</p>
+                          <p className="text-xs sm:text-sm text-blue-700 truncate max-w-xs">{app.program}</p>
                           {app.appliedAt && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              Applied on: {app.appliedAt.toDate().toLocaleDateString()}
+                            <p className="text-[10px] sm:text-xs text-gray-500 mt-1">
+                              Applied: {app.appliedAt.toDate().toLocaleDateString()}
                             </p>
                           )}
                         </div>
-                        <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-                          app.status === 'Processed' ? 'bg-green-100 text-green-700 border border-green-200' :
-                          app.status === 'Under Review' ? 'bg-yellow-100 text-yellow-700 border border-yellow-200' :
-                          'bg-gray-200 text-gray-700 border border-gray-300'
+                        <span className={`px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold rounded-full border ${
+                          app.status === 'Processed' ? 'bg-green-100 text-green-700 border-green-200' :
+                          app.status === 'Under Review' ? 'bg-yellow-100 text-yellow-700 border-yellow-200' :
+                          'bg-gray-200 text-gray-700 border-gray-300'
                         }`}>
                           {app.status || 'Pending'}
                         </span>
@@ -496,18 +502,18 @@ export default function Dashboard() {
               {/* Uploaded Documents */}
               <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
                 <h3 className="font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2">
-                  <FolderOpen className="text-orange-500" size={20} /> My Documents
+                  <FolderOpen className="text-orange-500" size={20} /> Documents
                 </h3>
                 
                 {!userProfile.documents || Object.keys(userProfile.documents).length === 0 ? (
                   <p className="text-sm text-gray-500 italic">No documents uploaded.</p>
                 ) : (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {Object.entries(userProfile.documents).map(([docKey, url]) => (
-                      <div key={docKey} className="border border-gray-200 p-3 rounded-lg flex items-center justify-between bg-gray-50">
-                        <div className="flex items-center gap-2 overflow-hidden">
-                          <FileText className="text-orange-500 shrink-0" size={20} />
-                          <span className="text-xs font-bold text-gray-700 truncate capitalize">
+                      <div key={docKey} className="border border-gray-200 p-3 rounded-lg flex items-center justify-between bg-gray-50 w-full overflow-hidden">
+                        <div className="flex items-center gap-2 overflow-hidden w-full">
+                          <FileText className="text-orange-500 shrink-0" size={18} />
+                          <span className="text-xs font-bold text-gray-700 truncate capitalize flex-1">
                             {docKey.replace('_', ' ')}
                           </span>
                         </div>
@@ -515,7 +521,7 @@ export default function Dashboard() {
                           href={url as string} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-blue-600 hover:bg-blue-100 p-2 rounded transition shrink-0"
+                          className="text-blue-600 hover:bg-blue-100 p-1.5 sm:p-2 rounded transition shrink-0 ml-2"
                           title="View / Download"
                         >
                           <Download size={16} />
