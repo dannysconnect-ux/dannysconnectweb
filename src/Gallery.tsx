@@ -48,7 +48,7 @@ export default function Gallery() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
             <div className="flex-shrink-0">
-              <img src="/logo.png" alt="Danny's Connect" className="w-48 h-auto" />
+              <img src="/logo.png" alt="Danny's Connect" className="w-20 h-auto" />
             </div>
             <div className="hidden md:flex space-x-8 items-center">
               <a href="/" className="text-gray-600 hover:text-blue-600 font-medium">Home</a>
