@@ -117,7 +117,7 @@ export default function AboutUs() {
               <span className="block text-blue-600">Through Global Education</span>
             </h1>
             <p className="mt-3 text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 leading-relaxed">
-              Danny's Connect was founded in 2019 by Danny Chisabanga with a mission to make quality post-secondary education accessible to all regardless of financial background. We believe that education is a powerful tool for transformation, not just for individuals, but for entire communities and nations.
+              Danny's Connect was founded in 2018 by Danny Chisabanga with a mission to make quality post-secondary education accessible to all regardless of financial background. We believe that education is a powerful tool for transformation, not just for individuals, but for entire communities and nations.
             </p>
           </div>
         </div>

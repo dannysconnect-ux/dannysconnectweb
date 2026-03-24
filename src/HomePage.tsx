@@ -18,17 +18,17 @@ import {
 // --- Carousel Data (Images + Services) ---
 const CAROUSEL_DATA = [
   {
-    img: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=2000",
+    img: "Education.jpeg",
     title: "Study Abroad & Scholarships",
-    desc: "Connecting Zambian students to top universities globally. Seamless study abroad and scholarship opportunities."
+    desc: "Connecting students to top universities globally. Seamless study abroad and scholarship opportunities."
   },
   {
-    img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=2000",
+    img: "air.jpg",
     title: "Flight Ticket Booking",
     desc: "We help you find affordable and convenient flight options for students and travelers heading abroad."
   },
   {
-    img: "/grads.jpg", 
+    img: "/work.jpeg", 
     title: "Paid Internships Abroad",
     desc: "Access international internship opportunities that offer real-world experience and a paycheck."
   }
@@ -166,7 +166,7 @@ export default function Homepage() {
             <h2 className="text-3xl sm:text-4xl font-black text-blue-900 mb-4">What we do best?</h2>
             <div className="w-16 h-1 bg-yellow-400 mx-auto md:mx-0 mb-6"></div>
             <p className="text-blue-800 text-base sm:text-lg leading-relaxed font-medium mb-6">
-              Watch this short video as you meet <strong className="text-orange-500">Danny Chisabanga</strong>, CEO and Founder of Danny's Connect. He explains the process and what you should expect from our dedicated team.
+              Watch this short video as you meet <strong className="text-orange-500">One of our students</strong>, She explains the process and what you should expect from our dedicated team.
             </p>
             <button 
               onClick={() => navigate('/about-us')}
@@ -188,25 +188,36 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* 3. AI Features Section */}
+      {/* 3. AI Features Section - UPDATED TO BE CLICKABLE */}
       <section className="bg-blue-900 py-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-10 flex items-center justify-center gap-2">
             <Sparkles className="text-yellow-400" size={28} /> Supercharged by AI <Sparkles className="text-yellow-400" size={28} />
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-colors">
-              <Bot className="text-orange-500 mb-4 mx-auto" size={48} />
+            <div 
+              onClick={() => navigate('/signup')}
+              className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-all cursor-pointer hover:scale-105 active:scale-95 group"
+            >
+              <Bot className="text-orange-500 mb-4 mx-auto group-hover:animate-bounce" size={48} />
               <h3 className="text-white font-bold text-xl mb-3">Consultation Bot</h3>
               <p className="text-blue-200 text-sm">24/7 personalized guidance for your application process and general inquiries.</p>
             </div>
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-yellow-400 transition-colors">
-              <FileCheck className="text-yellow-400 mb-4 mx-auto" size={48} />
+            
+            <div 
+              onClick={() => navigate('/signup')}
+              className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-yellow-400 transition-all cursor-pointer hover:scale-105 active:scale-95 group"
+            >
+              <FileCheck className="text-yellow-400 mb-4 mx-auto group-hover:animate-bounce" size={48} />
               <h3 className="text-white font-bold text-xl mb-3">Auto-Processing</h3>
               <p className="text-blue-200 text-sm">Smart tools to instantly verify, organize, and format your application documents.</p>
             </div>
-            <div className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-colors sm:col-span-2 md:col-span-1">
-              <Globe className="text-orange-500 mb-4 mx-auto" size={48} />
+            
+            <div 
+              onClick={() => navigate('/signup')}
+              className="bg-blue-800 border border-blue-700 p-8 rounded-xl hover:border-orange-500 transition-all cursor-pointer hover:scale-105 active:scale-95 group sm:col-span-2 md:col-span-1"
+            >
+              <Globe className="text-orange-500 mb-4 mx-auto group-hover:animate-bounce" size={48} />
               <h3 className="text-white font-bold text-xl mb-3">Matching Engine</h3>
               <p className="text-blue-200 text-sm">Matches your specific profile with the perfect global universities and scholarships.</p>
             </div>
@@ -256,7 +267,7 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* 5. Testimonials / Success Stories -> FLEX WRAP LAYOUT */}
+      {/* 5. Testimonials / Success Stories */}
       <section className="py-16 bg-blue-100 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
@@ -265,7 +276,6 @@ export default function Homepage() {
             <p className="text-blue-800 mt-4">Hear directly from students who have made their global dreams a reality.</p>
           </div>
 
-          {/* Flex Wrap Container for Responsiveness */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {TESTIMONIALS.map((video) => (
               <div 
